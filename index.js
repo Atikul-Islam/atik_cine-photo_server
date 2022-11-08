@@ -17,12 +17,16 @@ console.log(process.env.DB_PASSWORD)
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.zp5ddvi.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-client.connect(err => {
-  const collection = client.db("test").collection("users");
-  // perform actions on the collection object
-  console.log('database connected');
-  client.close();
-});
+
+async function run(){
+    try{
+        const servicesCollection = client.db('dbUser1').collection('services')
+    
+    }
+    finally{
+
+    }
+}
 
 
 app.get('/', (req, res)=>{
