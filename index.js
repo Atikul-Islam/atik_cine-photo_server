@@ -12,16 +12,14 @@ app.use(express.json());
 //username: dbUser1
 //pass: W2FuRoTftfGtcHo2
 
-console.log(process.env.DB_USER)
-console.log(process.env.DB_PASSWORD)
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.zp5ddvi.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 async function run(){
     try{
-        const servicesCollection = client.db('dbUser1').collection('services')
-    
+        const servicesCollection = client.db('cinePhoto').collection('services')
+        const reviewsCollection = client.db('lockpc').collection('reviews')
 
         app.get('/', async (req, res) => {
             const query = {};
@@ -36,16 +34,19 @@ async function run(){
             const services = await cursor.toArray()
             res.send(services)
         })
+
+        app.post('/reviews', async (req, res) => {
+            const review = req.body;
+            const result = await reviewsCollection.insertOne(review)
+            res.send(result)
+        })
     }
     finally{
 
     }
 }
 
-
-app.get('/', (req, res)=>{
-    res.send('server is runnig')
-})
+run().catch(err => console.error(err))
 
 app.listen(port, () =>{
     console.log(`server running on ${port}`)
