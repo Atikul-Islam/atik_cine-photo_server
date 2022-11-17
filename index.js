@@ -20,14 +20,15 @@ async function run(){
     try{
         const servicesCollection = client.db('cinePhoto').collection('services')
         const reviewsCollection = client.db('lockpc').collection('reviews')
-
+        
+//services
         app.get('/', async (req, res) => {
             const query = {};
             const cursor = servicesCollection.find(query).limit(3);
             const services = await cursor.toArray()
             res.send(services)
         })
-//services card
+
         app.get('/services', async (req, res) => {
             const query = {};
             const cursor = servicesCollection.find(query);
@@ -53,6 +54,14 @@ async function run(){
             const cursor = reviewsCollection.find(query)
             const reviews = await cursor.toArray()
             res.send(reviews)
+        })
+
+        app.get('review/:id', async (req, res) => {
+            const id = req.params.id
+            const query = {_id: parseInt(id)}
+            const cursor = reviewsCollection.find(query)
+            const result = await cursor.toArray()
+            res.send(result)
         })
     }
     finally{
